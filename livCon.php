@@ -1,66 +1,38 @@
 <?php
     include('fswdd.php'); //fswdu - Funções Sistema Web Definidas pelo Desenvolvedor
 
-    //Se não estiver na sessão "login_alun" retorna para a página inicial
-    session_start();
-    if(!isset($_SESSION['login_alun'])){
-        header("Location: index.php");
+    if (session_status() == PHP_SESSION_NONE)
+        session_start();
+
+    //Se não estiver na sessão "login" executa logout
+    if(!isset($_SESSION['login']) ){
+        header("Location: index.php?requisicao=logout");
         exit();
-    }
-
-    //Nome do Aluno
-    echo "<h1>" . $_SESSION['usuario'] . "</h1>";
-
-    $conn = servidor();
-
-    $sql = "SELECT d.id, d.nome, CASE WHEN m.aluno is null THEN 0 ELSE 1 END AS matriculado FROM disciplina d LEFT OUTER JOIN (SELECT aluno, disciplina from matricula WHERE aluno = ? ) m ON m.disciplina = d.id ORDER BY d.nome;";
-    $ps = $conn->prepare($sql);
-    $ps->bind_param("i", $_SESSION['id_alun'] );
-    $ps->execute();
-    $result = $ps->get_result();
-
-    echo "<table>";
-    echo "    <tr>";
-    echo "        <th id='tblTextCenter'>Id</th>";
-    echo "        <th id='tblTextCenter'>Disciplina</th>";
-    echo "        <th id='tblTextCenter'>Matriculado</th>";
-    echo "        <th id='tblTextCenter'>Notas</th>";
-    echo "    </tr>";
-    if( $result->num_rows > 0){
-        while($row = $result->fetch_assoc()){
-            echo "<tr>";
-            echo "    <td>" . $row["id"] . "</td>";
-            echo "    <td>" . $row["nome"] . "</td>";
-            if($row["matriculado"] == 0)
-                echo "    <td id='tblTextCenter'> <a href='index.php?requisicao=fazMatDisc&id_disc=" . $row["id"] . "&id_alun=" . $_SESSION['id_alun'] . "' title='Matricular em " . $row["nome"] . "'>Não</a> </td>";
-            else
-                echo "    <td id='tblTextCenter'>Sim</td>";
-            echo "    </td>";
-            if($row["matriculado"] == 0)
-                echo "    <td id='tblTextCenter'></td>";
-            else
-                echo "    <td id='tblTextCenter'> <a href='index.php?requisicao=notaAlun&id_disc=" . $row["id"] . "&id_alun=" . $_SESSION['id_alun'] . "' title='Ver nota de " . $row["nome"] . "'>Ver nota</a> </td>";
-            echo "    </td>";
-            echo "</tr>";
-        }
-    }
-    echo "</table>";
-    echo "<br>";
-    echo "<br>";
-    echo "<a href='index.php?requisicao=aluno'>Voltar</a> ";
-
-    //    var_dump($_SERVER)
-    if($_SERVER['REQUEST_METHOD']=="POST"){
-    }
+    }    
 ?>
 
 <!DOCTYPE HTML>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="estilo.css" />
-        <meta charset="UTF-8" />
-    </head>
     <body>
+        <form class="consulta" id="consulta" name="consulta" method="post" action="index.php?requisicao=consulta">
+            <label for="Cad_user">Consulta de Livro</label>
 
+            <select class="form-control form-select-lg mb-3" aria-label=".form-select-lg example" name="consulta">
+                <option selected>Selecione o termo</option>
+                <option value="autor_sobrenome">Sobrenome do Autor</option>
+                <option value="autor_nome">Nome do Autor</option>
+                <option value="titulo">Título</option>
+                <option value="subtitulo">Subtítulo</option>
+                <option value="genero">Gênero</option>
+                <option value="ISBN">ISBN</option>
+                <option value="corredor">Corredor</option>
+                <option value="estante">Estante</option>
+                <option value="todos">Todos</option>
+            </select>
+
+            <input class="form-control"type="text" id="termo" name="termo" maxlength=20 placeholder="Termo da pesquisa"/></br>
+
+            <input  type="submit"  class="btn btn-info" onclick="Enviar();" value="Consultar"/>
+        </form>
     </body>
 </html>

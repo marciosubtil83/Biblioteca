@@ -1,0 +1,23 @@
+SEGUEM ABAIXO INFORMAÇÕES PARA TESTE
+
+*LOGIN ALUNO*
+usuario   joao.sucla
+senha     1234
+
+*LOGIN PROFESSOR*
+usuario   thiago.s.u
+senha     1234
+
+*LOGIN ADMINISTRADOR*
+usuario   admin
+senha     1234
+
+
+*LIVROS CADASTRADOS PARA TESTE DA CONSULTA*
+
+AUTOR       NOME                TITULO                              SUBTITULO                       GENERO      ISBN            CORREDOR   ESTANTE
+Guimarães   Mayck de Oliveira   Tentando                            A árdua história da graduação   Fantasia    0000000000001   15          156
+Guimarães   Mayck de Oliveira   Bicicleta                           Como quebrar a cara             Vida Real   0000000000003   8           83
+Subtil      Marcio Alexsander   O incrível caso do PI abandonado    A saga da recuperação           Fantasia    0000000000004   15          152
+Subtil      Marcio Alexsander   TI                                  Como trabalhar muito            Vida Real   0000000000002   8           82
+

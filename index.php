@@ -56,7 +56,12 @@
         </div>
         <?php
             switch($_GET['requisicao']){
-
+                case "consulta":
+                    include(__DIR__."/livro_consultado.php");
+                    break;                
+                case "livCadastrado":
+                    include(__DIR__."/livro_cadastrado.php");
+                    break;
                 case "livroCadastro":
                     include(__DIR__."/livCad.php");
                     break;                

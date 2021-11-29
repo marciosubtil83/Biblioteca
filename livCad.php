@@ -1,82 +1,124 @@
 <?php
-    include('fswdd.php'); //fswdu - Funções Sistema Web Definidas pelo Desenvolvedor
 
-    //Se não estiver na sessão "login_prof" retorna para a página inicial
-    session_start();
-    if(!isset($_SESSION['login_prof'])){
-        header("Location: index.php");
-        exit();
-    }
+    include_once('fswdd.php'); //fswdd - Funções do Sistema Web Definidas pelo Desenvolvedor
 
-    //Nome do Professor
-    echo "<h1>" . $_SESSION['usuario'] . "</h1>";
+    //inicia session em php, se já não estiver iniciada
+    if (session_status() == PHP_SESSION_NONE)
+        session_start();
 
-    $conn = servidor();
+    //se sessão 'login' não estiver iniciada, não permite entrar na tela de cadastro de fornecedor
+#    if(!isset($_SESSION['login']))
+#        header("Location: index.php");
 
-    $sql = "SELECT id, nome FROM disciplina WHERE professor = ? ORDER BY nome;";
-    $ps = $conn->prepare($sql);
-    $ps->bind_param("i", $_SESSION['id_prof'] );
-    $ps->execute();
-    $result = $ps->get_result();
+        //não permite usuário com permissao inferior à nivel 5 realizar cadastro de fornecedor
+#    if($_SESSION['permissao'] < 5){
+#        header("Location: index.php?requisicao=logout");
+#    }
 
-    echo "<table>";
-    echo "    <tr>";
-    echo "        <th>Id</th>";
-    echo "        <th>Disciplina</th>";
-    echo "        <th id='tblTextCenter'>Atividade</th>";
-    echo "    </tr>";
-    if( $result->num_rows > 0){
-        while($row = $result->fetch_assoc()){
-            echo "<tr>";
-            echo "    <td>" . $row["id"] . "</td>";
-            echo "    <td>" . $row["nome"] . "</td>";
-            echo "    <td id='tblTextCenter'> <a href='index.php?requisicao=cadAtiv&id_disc=" . $row["id"] . "&disc=" . $row["nome"] . "'>Ver</a> </td>";
-            echo "    </td>";
-            echo "</tr>";
-        }
-    }
-    echo "</table>";
-    echo "<h3>Cadastro de nova disciplina</h3>";
-    echo "<form action='index.php?requisicao=cadDisciplina' method='POST'> ";
-    echo "<label for='disciplina'>Nome da Disciplina</label> ";
-    echo "<input type='text' id='disciplina' name='disciplina'/><br><br> ";
-    echo "<input type='submit' value='Cadastrar'/> ";
-    echo "</form> ";
-    echo "<br> ";
-    echo "<br> ";
-    echo "<a href='index.php?requisicao=professor'>Voltar</a> ";
-
-
-    //    var_dump($_SERVER)
+    //se servidor receber uma requisição do método 'POST'
     if($_SERVER['REQUEST_METHOD']=="POST"){
 
+        //inicia conexão com o servidor do BD
         $conn = servidor();
     
-        If($_POST['disciplina'] != "")
-            $sql = "INSERT INTO disciplina (nome, professor) VALUES ('" . $_POST['disciplina'] . "', " . $_SESSION['id_prof'] . ");";
+        //se houver erro na conexão com o BD informa o erro e encerra conexão
+        if($conn->connect_error)
+            die("Falha na conexão: " . $conn->connect_error);
+
+        //Livro
+        $autorSobrenome = $_POST['autorSobrenome'];
+        $autorNome = $_POST['autorNome'];
+        $titulo = $_POST['titulo'];
+        $subtitulo = $_POST['subtitulo'];
+        $isbn = $_POST['isbn'];
+        $genero = $_POST['genero'];
+        $corredor = $_POST['corredor'];
+        $estante = $_POST['estante'];
+
+        if($corredor == "")
+            $corredor = 0;
         else{
-            echo "<b>Informe o nome da disciplina.</b>";
-            $sql = "";
+            $corredor = intval($corredor);
         }
 
-        if($sql != ""){
-            $result = $conn->query($sql);  //Executa a query SQL dentro da conexão com o BD configurada em $conn
-            if( $result === TRUE)
-                echo "Cadastro realizado com sucesso.";
-            else
-                echo "Erro: ". $sql . "<br>" . $conn->error;
+        if($estante == "")
+            $estante = 0;
+        else{
+            $estante = intval($estante);
         }
         
+
+        //Valida se todos os campos estão preenchidos na tela
+        if($autorSobrenome === "" || $autorNome === "" || $titulo === ""  || $subtitulo === ""  || $isbn === "" || $genero === "" || $corredor === 0 || $estante === 0){
+            echo "<p>Antes de salvar, preencha todos os dados do cadastro de usuário.</p>";
+            exit();
+        }
+        //Cadastro do usuário
+        else{
+            //Consulta isbn
+            $sql = "SELECT ISBN FROM bib_livro WHERE ISBN = ? ";
+            $ps = $conn->prepare($sql);
+            $ps->bind_param("s", $isbn );
+            $ps->execute();
+            $result = $ps->get_result();
+            if( $result->num_rows > 0){
+                header("Location: index.php?requisicao=livCadastrado&res=N");
+            }
+            else{
+                //Cadastrar usuário
+                $sql = "INSERT INTO bib_livro (autor_sobrenome, autor_nome, titulo, subtitulo, ISBN, genero, corredor, estante)
+                VALUES ('". $autorSobrenome ."', '". $autorNome ."', '". $titulo ."', '". $subtitulo ."', '". $isbn ."', '". $genero ."', ". $corredor .", ". $estante .")";
+                #$sql = "INSERT INTO bib_livro (autor_sobrenome, autor_nome, titulo, subtitulo, ISBN, genero, corredor, estante)
+                #        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                
+                //Executa a query SQL dentro da conexão com o BD configurada em $conn
+                $ps = $conn->prepare($sql);
+                #$ps->bind_param("ssssssii", $autorSobrenome, $autorNome, $titulo, $subtitulo, $isbn, $genero, $corredor, $estante );
+                $ps->execute();
+                $result = $ps->get_result();
+                #$result = $conn->query($sql);
+                //Se query foi executada
+                $id_livro = $ps->insert_id;
+                if( $id_livro > 0){
+                    $_SESSION['id_livro'] = $id_livro;
+                    header("Location: index.php?requisicao=livCadastrado&res=S");
+                }
+                //Se query não foi executada
+                else
+                    echo "Erro ao incluir cadastro do livro: ". $sql . "<br>" . $conn->error;
+            }        
+        }
     }
 ?>
 
+
 <!DOCTYPE HTML>
+
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="estilo.css" />
-        <meta charset="UTF-8" />
+        <title>Biblioteca - Cadastro de Livro</title>
+        <meta charset="utf-8">
     </head>
     <body>
-
+        <form class="cadastro" id="cadastro" name="Cadastro" method="post" action="index.php?requisicao=livroCadastro">
+            <label for="Cad_user">Cadastrar Livro</label>
+            <input class="form-control"type="text" id="autorSobrenome" required="required" name="autorSobrenome" maxlength=20 placeholder="Sobrenome do Autor"/>
+            </br>
+            <input class="form-control"type="text" id="autorNome" required="required" name="autorNome" maxlength=50 placeholder="Nome do Autor"/>
+            </br>
+            <input class="form-control"type="text" id="titulo" required="required" name="titulo" maxlength=50 placeholder="Título do livro"/>
+            </br>
+            <input class="form-control"type="text" id="subtitulo" required="required" name="subtitulo" maxlength=100 placeholder="Subtítulo do livro"/>
+            </br>
+            <input class="form-control"type="text" id="isbn" required="required" name="isbn" maxlength=13 placeholder="ISBN"/>
+            </br>
+            <input class="form-control"type="text" id="genero" required="required" name="genero" maxlength=20 placeholder="Gênero"/>
+            </br>
+            <input class="form-control"type="number" id="corredor" required="required" name="corredor" placeholder="Nº do Corredor"/>
+            </br>
+            <input class="form-control"type="number" id="estante" required="required" name="estante" placeholder="Nº da Estante"/>
+            </br>
+            <input  type="submit"  class="btn btn-info" onclick="Enviar();" value="Salvar"/>
+        </form>
     </body>
 </html>
