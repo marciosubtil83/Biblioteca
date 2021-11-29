@@ -80,8 +80,9 @@ input:hover{
     text-transform: uppercase;
     white-space: normal;
     word-wrap: break-word;
-    color:#fff;
-    background-color:#007bff!important;
+    color:black;
+    background-color:#fff!important;
+    /*background-color:#007bff!important;*/
     margin-top:40px;
     width:100%;
 }
