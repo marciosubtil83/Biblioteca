@@ -100,25 +100,34 @@
         <meta charset="utf-8">
     </head>
     <body>
-        <form class="cadastro" id="cadastro" name="Cadastro" method="post" action="index.php?requisicao=livroCadastro">
-            <label for="Cad_user">Cadastrar Livro</label>
-            <input class="form-control"type="text" id="autorSobrenome" required="required" name="autorSobrenome" maxlength=20 placeholder="Sobrenome do Autor"/>
-            </br>
-            <input class="form-control"type="text" id="autorNome" required="required" name="autorNome" maxlength=50 placeholder="Nome do Autor"/>
-            </br>
-            <input class="form-control"type="text" id="titulo" required="required" name="titulo" maxlength=50 placeholder="Título do livro"/>
-            </br>
-            <input class="form-control"type="text" id="subtitulo" required="required" name="subtitulo" maxlength=100 placeholder="Subtítulo do livro"/>
-            </br>
-            <input class="form-control"type="text" id="isbn" required="required" name="isbn" maxlength=13 placeholder="ISBN"/>
-            </br>
-            <input class="form-control"type="text" id="genero" required="required" name="genero" maxlength=20 placeholder="Gênero"/>
-            </br>
-            <input class="form-control"type="number" id="corredor" required="required" name="corredor" placeholder="Nº do Corredor"/>
-            </br>
-            <input class="form-control"type="number" id="estante" required="required" name="estante" placeholder="Nº da Estante"/>
-            </br>
-            <input  type="submit"  class="btn btn-info" onclick="Enviar();" value="Salvar"/>
-        </form>
+        <div class="container-fluid">
+            <div class="row">
+                <div class='col-6'>
+                    <table class="table">
+                        <form class="form-control" id="cadastro" name="Cadastro" method="post" action="index.php?requisicao=livroCadastro">
+                            <label class="form-control" for="Cad_user">Cadastrar Livro</label><br>
+
+                            <input class="form-control"type="text" id="autorSobrenome" required="required" name="autorSobrenome" maxlength=20 placeholder="Sobrenome do Autor"/>
+                            </br>
+                            <input class="form-control"type="text" id="autorNome" required="required" name="autorNome" maxlength=50 placeholder="Nome do Autor"/>
+                            </br>
+                            <input class="form-control"type="text" id="titulo" required="required" name="titulo" maxlength=50 placeholder="Título do livro"/>
+                            </br>
+                            <input class="form-control"type="text" id="subtitulo" required="required" name="subtitulo" maxlength=100 placeholder="Subtítulo do livro"/>
+                            </br>
+                            <input class="form-control"type="text" id="isbn" required="required" name="isbn" maxlength=13 placeholder="ISBN"/>
+                            </br>
+                            <input class="form-control"type="text" id="genero" required="required" name="genero" maxlength=20 placeholder="Gênero"/>
+                            </br>
+                            <input class="form-control"type="number" id="corredor" required="required" name="corredor" placeholder="Nº do Corredor"/>
+                            </br>
+                            <input class="form-control"type="number" id="estante" required="required" name="estante" placeholder="Nº da Estante"/>
+                            </br>
+                            <input  type="submit"  class="btn btn-info" onclick="Enviar();" value="Salvar"/>
+                        </form>
+                    </table>
+                </div> 
+            </div>
+        </div>
     </body>
 </html>

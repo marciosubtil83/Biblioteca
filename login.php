@@ -69,14 +69,31 @@
 <html lang="pt-br">
     <head>
         <title>Biblioteca</title>
-        <link rel="stylesheet" type="text/css" href="estilo.css">
+        <link rel="stylesheet" type="text/css" href="estilos/estilo_login.css">
     </head>
     <meta charset="utf-8">
     <body>
-        <form action="login.php" method="POST" id="formu">
-            <span><i class="fas fa-user"></i> <input type="text" name="user" placeholder="Usuario" required/></span><br>
-            <input type="password" name="pass" placeholder="Senha" required/>
-            <button type="submit">ACESSAR</button>
-        </form>
+
+
+
+        <div id="form">
+            <div id="content">
+            <center>
+                <div class="icon">                   
+                
+                    <h4>LOGIN IN</h4>
+                </div>
+            </center>
+
+                <form action="login.php" method="POST" id="formu">
+                    
+                    <span><i class="fas fa-user"></i> <input type="text" name="user" placeholder="Usuario" required/></span><br>
+                    <input type="password" name="pass" placeholder="Password" required/>
+                    <center><button type="submit">ACESSAR</button></center>
+
+                </form>
+                
+            </div>
+        </div>
     </body>
 </html>

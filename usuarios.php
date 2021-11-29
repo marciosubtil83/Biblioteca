@@ -97,21 +97,29 @@
         <meta charset="utf-8">
     </head>
     <body>
-        <form class="cadastro" id="cadastro" name="Cadastro" method="post" action="index.php?requisicao=usuario">
-            <label for="Cad_user">Cadastro Usuário</label>
-            <input class="form-control"type="text" id="nome" required="required" name="nome" maxlength=50 placeholder="Nome"/></br>
-            <input class="form-control"type="tel" id="telefone" required="required" name="telefone" maxlength=11 placeholder="Telefone"/> </br>
-            <input class="form-control"type="email" id="email" required="required" name="email" maxlength=100 placeholder="E-mail"/> </br>
-            <input class="form-control"type="text" id="user" required="required" name="user" maxlength=20 placeholder="Usuário"/></br>
-            <input class="form-control"type="password" id="senha" required="required" name="senha"placeholder="Senha"/></br>
-            <label for="Cad_user">Cadastro de acessos</label>
-            <select class="form-control form-select-lg mb-3" aria-label=".form-select-lg example" name="tipo_user">
-                <option selected>Selecione a Permissão</option>
-                <!-- <option value="Administrador">Administrador</option> -->
-                <option value="Aluno">Aluno</option>
-                <option value="Professor">Professor</option>
-            </select>
-            <input  type="submit"  class="btn btn-info" onclick="Enviar();" value="Salvar"/>
-        </form>
+        <div class="container-fluid">
+            <div class="row">
+                <div class='col-6'>
+                    <table class="table">
+                        <form class="cadastro" id="cadastro" name="Cadastro" method="post" action="index.php?requisicao=usuario">
+                            <label for="Cad_user">Cadastro Usuário</label>
+                            <input class="form-control"type="text" id="nome" required="required" name="nome" maxlength=50 placeholder="Nome"/></br>
+                            <input class="form-control"type="tel" id="telefone" required="required" name="telefone" maxlength=11 placeholder="Telefone"/> </br>
+                            <input class="form-control"type="email" id="email" required="required" name="email" maxlength=100 placeholder="E-mail"/> </br>
+                            <input class="form-control"type="text" id="user" required="required" name="user" maxlength=20 placeholder="Usuário"/></br>
+                            <input class="form-control"type="password" id="senha" required="required" name="senha"placeholder="Senha"/></br>
+                            <label for="Cad_user">Cadastro de acessos</label>
+                            <select class="form-control form-select-lg mb-3" aria-label=".form-select-lg example" name="tipo_user">
+                                <option selected>Selecione a Permissão</option>
+                                <!-- <option value="Administrador">Administrador</option> -->
+                                <option value="Aluno">Aluno</option>
+                                <option value="Professor">Professor</option>
+                            </select>
+                            <input  type="submit"  class="btn btn-info" onclick="Enviar();" value="Salvar"/>
+                        </form>
+                    </table>
+                </div> 
+            </div>
+        </div>
     </body>
 </html>
